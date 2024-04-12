@@ -28,19 +28,37 @@ class TestCases(unittest.TestCase):
     def test_case9(self):
         self.assertEqual(locate_card([8, 8, 6, 6, 6, 6, 6, 6, 3, 2, 2, 2, 0, 0, 0], 6), 2)
 
-    
+def test_location(cards, query, mid):
+    mid_number = cards[mid]
+
+    if mid_number == query:
+        if mid-1 >= 0 and cards[mid-1] == query:
+            return 'left'
+        else:
+            return 'found'
+    elif mid_number < query:
+        return 'left'
+    else:
+        return 'right'
 
 def locate_card(cards, query):
-    position = 0
+    low, high = 0, len(cards) - 1
 
-    while position < len(cards):
-        if cards[position] == query:
-            return position
-        
-        position += 1
+    while low <= high:
+        mid = (low + high) // 2
+        mid_number = cards[mid]
+        result = test_location(cards, query, mid)
+
+        print("low:", low, ", high:", high, ", mid:", mid, ", mid_number:", mid_number)
+
+        if result == 'found':
+            return mid
+        elif result == 'left':
+            high = mid - 1
+        elif result == 'right':
+            low = mid + 1
 
     return -1
-        
 
 
 tests = []
